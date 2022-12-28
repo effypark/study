@@ -10,3 +10,5 @@
 5. 성의없는 or 알아볼 수 없는 커밋을 할 경우 리젝
 6. 일일 커밋 실패시 벌금 만원(하루 기준 시간 밤12시, PR 시간을 기준으로 함)
 7. 벌금은 카톡 모임계좌에 쌓고 공금으로 사용
+
+![Generic badge](https://img.shields.io/badge/ver-1.0.0-blue.svg)
