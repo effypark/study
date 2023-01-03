@@ -8,6 +8,8 @@ type ActionType = {
 
 type Props = [any, () => void];
 
+// 현재는 예시라 any 작성, any 타입 지양할 것
+
 function reducer(state: any, action: ActionType) {
   switch (action.type) {
     case "LOADING":
@@ -33,12 +35,18 @@ function reducer(state: any, action: ActionType) {
   }
 }
 
-export function useAsync(callback: any, deps = []): Props {
+export function useAsyncWithSkip(
+  callback: any,
+  skip = false,
+  deps = []
+): Props {
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     data: null,
     error: false,
   });
+  // 첫번째 인자로는 callback 함수,
+  // 두번째 인자로는 initial state 를 넣어주어야 함
 
   const fetchData = useCallback(async () => {
     dispatch({ type: "LOADING" });
@@ -50,9 +58,10 @@ export function useAsync(callback: any, deps = []): Props {
     }
   }, [callback]);
 
-  // 이 부분은 좀 더 공부해야함...
-  // React Hook useEffect has a missing dependency
   useEffect(() => {
+    if (skip) return;
+    // skip === true 면 아무런 작업하지 않게 한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchData();
   }, deps);
 
