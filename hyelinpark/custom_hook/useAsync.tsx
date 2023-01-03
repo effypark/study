@@ -50,10 +50,12 @@ export function useAsync(callback: any, deps = []): Props {
     }
   }, [callback]);
 
-  // 이 부분은 좀 더 공부해야함...
-  // React Hook useEffect has a missing dependency
+  // 📝 React Hook useEffect has a missing dependency
+  // // eslint-disable-next-line react-hooks/exhaustive-deps 를 삽입하여 에러 해결
+
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return [state, fetchData];
