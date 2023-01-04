@@ -4,7 +4,8 @@
 사전 요구 사양: Node 14.0.0 이상, npm 5.6 이상.
 
 ```
-npx create-react-app my-app
+npx create-react-app my-app // js, jsx 환경
+npx create-react-app app --template typescript // ts, tsx 환경
 cd my-app
 npm start
 ```
