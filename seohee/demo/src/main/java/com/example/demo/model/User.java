@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Entity // 데이터베이스와 연결된 객체를 Entity로 지정한다는 어노테이션
 @Data  // 롬복의 어노테이션으로 Getter과 Setter를 직접 구현하지 않아도 사용할 수 있게 해주는 어노테이션
-
+@Table(name = "USERS")
 public class User{
     @Id
     // 데이터베이스에 Primary Key에 해당하는 칼럼을 지정하는 어노테이션
