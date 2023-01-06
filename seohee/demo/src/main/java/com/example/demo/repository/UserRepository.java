@@ -1,10 +1,10 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.User;
+import com.example.demo.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-// Entity 클래스와 해당 클래스의 Id 타입
-// = <User, Long>
-public interface UserRepository extends JpaRepository<User, Long> {
+@Repository
+public interface UserRepository extends JpaRepository<Users, Long> {
 
 }
