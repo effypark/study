@@ -10,6 +10,9 @@ import Root from "./pages/UsememoUseEffect";
 import RouteTest from "./pages/RouteTest";
 import ErrorPage from "./pages/ErrorPage";
 import TestComponent from "./pages/TestComponent";
+import UseTransition from "./pages/loadBalance/UseTransition";
+import NoneUseTransition from "./pages/loadBalance/NoneUseTransition";
+import UseDeferredValue from "./pages/loadBalance/UseDeferredValue";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +26,23 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "ClassComponent", //이와 같이 유동적인 pramater를 받을 수 있습니다.
+    path: "ClassComponent",
     element: <TestComponent />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "UseTransition",
+    element: <UseTransition />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "NoneUseTransition",
+    element: <NoneUseTransition />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "UseDeferredValue",
+    element: <UseDeferredValue />,
     errorElement: <ErrorPage />,
   },
 ]);
