@@ -34,7 +34,7 @@ public class UserController {
 //    public Users create(@RequestBody Users user) {
 //        return userRepository.save(user);
 //    }
-    
+
     @GetMapping("/user/{id}")
     public String read(@PathVariable Long id) {
 
