@@ -14,5 +14,5 @@ _참고 링크 : <https://usehooks.com/>_
 - [x] useConfirm : onConfirm event handling hook
 - [x] useAsync : 요청 상태관리 hook
 - [x] useToggle : toggler hook
-- [x] useSessionStorage : 세션 스토리지 상태 저장 handling hook
+- [ ] useSessionStorage : 세션 스토리지 상태 저장 handling hook
 - [ ] useLocalStorage : 로컬 스토리지 상태 저장 handling hook
