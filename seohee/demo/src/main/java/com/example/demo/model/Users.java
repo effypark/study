@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+
 public class Users {
     @Id
     // 데이터베이스에 Primary Key에 해당하는 칼럼을 지정하는 어노테이션
@@ -20,22 +21,8 @@ public class Users {
     //  IDENETY를 설정하면 DB의 AutoIncreament를 사용
 
     private Long id;
-    public Long getId() { return id; }
-
-    public void setId(Long id) { this.id = id; }
 
     private String username;
 
-    // getter
-    public String getUserName() { return username; }
-
-    // setter
-    public void setUserName(String username) { this.username = username; }
-
     private String password;
-
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
 }
