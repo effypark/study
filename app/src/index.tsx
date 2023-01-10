@@ -13,6 +13,7 @@ import TestComponent from "./pages/TestComponent";
 import UseTransition from "./pages/loadBalance/UseTransition";
 import NoneUseTransition from "./pages/loadBalance/NoneUseTransition";
 import UseDeferredValue from "./pages/loadBalance/UseDeferredValue";
+import AddScriptTag from "./pages/AddScript/AddScriptTag";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
   {
     path: "UseDeferredValue",
     element: <UseDeferredValue />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "AddScriptTag",
+    element: <AddScriptTag />,
     errorElement: <ErrorPage />,
   },
 ]);
