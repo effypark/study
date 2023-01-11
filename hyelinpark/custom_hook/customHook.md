@@ -16,3 +16,4 @@ _참고 링크 : <https://usehooks.com/>_
 - [x] useToggle : toggler hook
 - [ ] useSessionStorage : 세션 스토리지 상태 저장 handling hook
 - [x] useLocalStorage : 로컬 스토리지 상태 저장 handling hook
+- [x] usePrevious : props 또는 state 의 이전 값을 얻기 위한 hook
