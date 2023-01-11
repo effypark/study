@@ -25,3 +25,26 @@ Lombok(롬복)이란?
 
 1. 롬복(Lombok)은 자바 클래스를 만들때 자주 사용되는 getter/setter나 toString 등의 코드를 어노테이션으로 대체해서 선언 
 2. java 코드를 컴파일 할 때 그에 맞는 코드를 생성
+
+
+JPA 사용 시 데이터를 저장하거나 변경할 때는 항상 @Transactional 내에서 실행해야 합니다.
+@Transactional 어노테이션을 서비스 계층에 추가하면 됩니다.
+==>
+- transaction begin, commit을 자동 수행해줍니다.
+- 예외를 발생시키면, rollback 처리를 자동 수행해줍니다.
+
+MyBatis란?
+객체지향 언어인 자바의 관계형 데이터베이스 프로그래밍을 좀 더 쉽게 할 수 있게 도와주는 개발 프레임워크
+복잡한 JDBC 코드를 걷어내며 깔끔한 소스코드를 유지할 수 있다.
+자바의 객체(Object)와 SQL 사이에서 자동 맵핑을 도와주는 프레임워크
+XML 형태로 쓰인 JDBC 코드라고 생각해도 될 만큼 JDBC의 모든 기능을 제공한다.
+
+ex)
+`@Mapper
+public interface UserMapper {
+    @Select("SELECT * FROM user")
+    List<User> findAll();
+
+    @Select("SELECT * FROM user WHERE userIdx = #{userIdx}")
+    User findByUserIdx(@Param("userIdx") int userIdx);
+}`
