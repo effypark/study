@@ -17,6 +17,8 @@ CLI 자체를 경험해 보려면 그냥 cmd를 열어도 되지만 Linux CLI를
 
 위 구성품으로 가상환경을 구성 해준 뒤 터미널을 열어 Linux CLI를 맞이해 봅니다.
 
+※이 때 BIOS 셋팅에서 반드시 CPU -> SVM Mode를 활성화 해주어야 합니다. 그렇지 않으면 가상환경은 실행되지 못합니다.
+
 ### 2. CLI Command
 시스템 조작
 #### 1. pwd (Print Work Directory)
