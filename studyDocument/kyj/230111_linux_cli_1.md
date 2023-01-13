@@ -1,18 +1,18 @@
 # mac에서 살아남기: Linux CLI(Command Line Interface) 01
 
 ## 1. CLI란?
-<img src="https://www.linuxjournal.com/sites/default/files/styles/max_650x650/public/u%5Buid%5D/CoolRetroTerm.png" alt=""/><br/>
+![img](https://www.linuxjournal.com/sites/default/files/styles/max_650x650/public/u%5Buid%5D/CoolRetroTerm.png)
 CLI이란 명령어를 입력하여 원하는 동작을 도출해내는 근본 그 자체인 interface입니다. 단순 텍스트 기반이라 빠르고 GUI환경에 비해 다량의 데이터를 다룰 때 수정 및 편집이 수월합니다.
 
 [참조]
 [What is CLI](https://www.w3schools.com/whatis/whatis_cli.asp)
 
 ### 1-1. Linux setthing on window
-CLI 자체를 경험해 보려면 그냥 cmd를 열어도 되지만 Linux CLI를 경험해 보려면 당연히 Linux를 기반으로 한 OS가 필수 입니다.<br/> 
+CLI 자체를 경험해 보려면 그냥 cmd를 열어도 되지만 Linux CLI를 경험해 보려면 당연히 Linux를 기반으로 한 OS가 필수 입니다.  
 집에서는 Windows OS 를 사용하고 있기에 가상환경을 이용하여 확인해 보았습니다.
 
-[필요 구성품]<br/>
-[VirtualBox-7.0.4-154605-Win](https://www.virtualbox.org/wiki/Downloads) : 가상환경을 셋업 할 수 있는 유틸입니다.<br/>
+[필요 구성품]  
+[VirtualBox-7.0.4-154605-Win](https://www.virtualbox.org/wiki/Downloads) : 가상환경을 셋업 할 수 있는 유틸입니다.  
 [Ubuntu](https://ubuntu.com/download/desktop/thank-you?version=22.04.1&architecture=amd64): 리눅스 커널을 기반으로 한 리눅스 배포판 OS입니다.
 
 위 구성품으로 가상환경을 구성 해준 뒤 터미널을 열어 Linux CLI를 맞이해 봅니다.
@@ -36,6 +36,10 @@ cd와 좌표만 있다면 어디든 갈 수 있습니다.
 ```
 $ cd 이동할 경로
 ```
+깜빡하고 한단계 더 들어와 버렸다면 아래 명령어로 상위 디렉토리로 이동 할 수 있습니다.  
+```
+$ cd..
+```
 
 #### 4. mkdir (make directory)
 필요한 권한만 가지고 있다면 Linux 시스템에서 원하는 위치에 폴더를 만들 수 있습니다.
@@ -43,7 +47,7 @@ $ cd 이동할 경로
 mkdir [옵션][생성 할 디렉토리명]
 ```
 
-[자주쓰는 옵션]<br/>
+[자주쓰는 옵션]  
 -m(mode)[defualt 755]: 디렉토리를 생성할 때 권한을 설정합니다. 디폴트로 주어지는 권한은 755입니다.
 ```
 mkdir -m 644 test
@@ -61,7 +65,7 @@ mkdir: created directory 'new_folder1'
 mkdir: created directory 'new_folder2'
 mkdir: created directory 'new_folder3'
 ```
-[참조]<br/>
+[참조]  
 [linux Permission](https://securityspecialist.tistory.com/40)
 
 #### 5. rmdir (remove directory)
@@ -76,7 +80,7 @@ mkdir [옵션][생성 할 디렉토리]
 rm [옵션] [디렉토리 경로나 파일명]
 ```
 
-[자주쓰는 옵션]<br/>
+[자주쓰는 옵션]  
 -r : 해당 폴더와 해당 폴더 안에있는 모든 파일, 디렉토리까지 삭제합니다. 하여 제귀적으로 지운다고도 표현 합니다.
 ```
 $ mkdir -p test1
