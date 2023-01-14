@@ -6,10 +6,7 @@
 
 ==> 컨트롤러 파일에서 서비스 로직 파일을 호출하고, 서비스로직파일에서는 레포지토리 인터페이스를 사용하여 데이터베이스에 데이터를 입력한다.
 
+***
 
-html에서 Controller로 정보 전달
-Controller에서 정보를 받은 후 Service로 전달
-Service에서 Entity로 정보 전달
-Entity에서 DTO타입을 Entity타입으로 변환 후 Service에 전달
-Service에서 받은 후 Repository(JPA)로 전달
-처리 완료 후 지정한 메서드 or 페이지로 이동
+![](../../../../../../var/folders/r3/7m4blks55kn4z4xy5lhvb98r0000gn/T/TemporaryItems/NSIRD_screencaptureui_JFXpNk/스크린샷 2023-01-14 오후 11.26.19.png)
+
