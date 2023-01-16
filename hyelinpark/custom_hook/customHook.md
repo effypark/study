@@ -20,3 +20,4 @@ _참고 링크 : <https://usehooks.com/>_
 - [x] useAnimation : 부드러운 애니메이션 구현 hook (이미지, 선형, 도형 등 애니메이션 사용할 때 useState 나 useEffect 를 사용하지 않고 useAnimationTimer hook 을 사용해서 구현 할수 있음)
 - [x] useAnimationTimer : 타이머 로직 hook (이건 잘 활용하면 여기저기 쓸 수 있을 것 같아 좀 더 연습해볼 예정!!)
 - [x] useScrollFadeIn : 요소를 fade in-out 시키는 hook (스크롤에 따라 화면에 요소를 노출할 때)
+- [x] useTransition : unmount 되는 컴포넌트에 애니메이션을 추가하기 위한 hook (클릭 이벤트로 mount/unmount 시 transition 이 일어나는 컴포넌트를 개발 중에 useScrollFadeIn 으로 스크롤에 의존해서 효과를 주는 것을 변경해서 재사용해보려 했으나, unmount 시 transition 을 주기 어려워 적용해봄)
