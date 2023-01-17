@@ -22,4 +22,9 @@ public class UserController {
     public List<UserDto> getUser() {
         return userService.getUserList();
     }
+
+    @RequestMapping(value = "/active-user", method = RequestMethod.GET)
+    public List<UserDto> getActiveUser() {
+        return userService.getActiveUserList();
+    }
 }

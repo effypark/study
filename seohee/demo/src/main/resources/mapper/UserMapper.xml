@@ -7,4 +7,7 @@
         SELECT * FROM demo.users
     </select>
 
+    <select id="getActiveUserList" resultType="com.example.demo.dto.UserDto">
+        SELECT * FROM demo.users where active = 'Y'
+    </select>
 </mapper>
