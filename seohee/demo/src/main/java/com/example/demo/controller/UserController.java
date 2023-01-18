@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public void insertUser(UserDto userDto) {
+    public int insertUser(UserDto userDto) {
         return userService.insertUser(userDto);
     }
 }
