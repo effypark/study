@@ -10,4 +10,7 @@ public interface UserMapper {
     List<UserDto> getUserList();
 
     List<UserDto> getActiveUserList();
+
+    // int 0실패, 1성공으로 반환
+    int insertUser(UserDto userDto);
 }

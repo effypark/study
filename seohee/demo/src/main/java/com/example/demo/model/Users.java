@@ -20,7 +20,7 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //  IDENETY를 설정하면 DB의 AutoIncreament를 사용
 
-    private Long id;
+    private Long idx;
 
     private String username;
 
