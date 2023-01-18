@@ -7,4 +7,12 @@
         SELECT * FROM demo.users
     </select>
 
+    <select id="getActiveUserList" resultType="com.example.demo.dto.UserDto">
+        SELECT * FROM demo.users where active = 'Y'
+    </select>
+
+    <insert id="insertUser" parameterType="com.example.demo.dto.UserDto">
+        INSERT INTO USER(username, password)
+        VALUES (#{username}, #{password})
+    </insert>
 </mapper>

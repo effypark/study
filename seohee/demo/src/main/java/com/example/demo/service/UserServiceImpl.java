@@ -17,4 +17,12 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getUserList() {
         return userMapper.getUserList();
     }
+
+    public List<UserDto> getActiveUserList() {
+        return userMapper.getActiveUserList();
+    }
+
+    public void insertUser(UserDto userDto) {
+        return userMapper.insertUser(userDto);
+    };
 }
