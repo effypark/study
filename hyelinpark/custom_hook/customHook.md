@@ -22,3 +22,4 @@ _참고 링크 : <https://usehooks.com/>_
 - [x] useScrollFadeIn : 요소를 fade in-out 시키는 hook (스크롤에 따라 화면에 요소를 노출할 때)
 - [x] useTransition : unmount 되는 컴포넌트에 애니메이션을 추가하기 위한 hook (클릭 이벤트로 mount/unmount 시 transition 이 일어나는 컴포넌트를 개발 중에 useScrollFadeIn 으로 스크롤에 의존해서 효과를 주는 것을 변경해서 재사용해보려 했으나, unmount 시 transition 을 주기 어려워 적용해봄)
 - [x] useFullScreen
+- [x] useStep : 한 모달 내에서 multi step 으로 구현하고자 사용해보았는데, 사용할 때 훨씬 가독성이 좋은 것 같아 기록
