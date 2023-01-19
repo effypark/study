@@ -9,3 +9,4 @@ export * from "./useAnimationTimer";
 export * from "./useAnimation";
 export * from "./useScrollFadeIn";
 export * from "./useTransition";
+export * from "./useFullScreen";
