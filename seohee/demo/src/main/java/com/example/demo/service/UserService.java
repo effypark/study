@@ -11,7 +11,7 @@ public interface UserService {
 
     public List<UserDto> getActiveUserList();
 
-    public void insertUser(UserDto userDto) {
-        UserMapper.insertUser();
-    };
+    public int insertUser(UserDto userDto) {
+        return UserDto.insertUser(userDto);
+    }
 }
