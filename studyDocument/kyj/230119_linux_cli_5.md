@@ -27,4 +27,6 @@ Inter-Process Communication
 다른 것도 있다. 바로 LPC(Local Inter-Process Communication, 로컬 컴퓨터 프로세스간 통신)라는 게 있는데 프로세스가 다른 프로세스와 정보를 주고 받을 때 빠른 속도로 데이터를 교환하기 위해 사용한다. 다만 이건 커널에서만 쓸 수 있으며 일반 프로그램은 LPC를 사용할 수 없다.
 ```
 
+```
 ls --help | grep 프로세스 grepPipeline.txt
+```
