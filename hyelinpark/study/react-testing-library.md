@@ -75,3 +75,120 @@ describe('<Profile />', () => {
 - yarn run start 해서 실행
 - react-testing-library 에서 컴포넌트를 렌더링 할 때에는 **render()** 라는 함수를 사용합니다
 - 이 함수가 호출되면 그 결과물 에는 DOM 을 선택 할 수 있는 다양한 쿼리들과 container 가 포함되어있는데, 여기서 **container** 는 해당 컴포넌트의 최상위 DOM 을 가르킵니다. 이를 가지고 스냅샷 테스팅을 할 수도 있습니다
+
+<br />
+
+### 2. 스냅샷 테스팅
+
+- 스냅샷 테스팅이란, 렌더링된 결과가 이전에 렌더링한 결과와 일치하는지 확인하는 작업을 의미합니다
+- 코드를 저장하면 `src/__snapshots__/Profile.test.js.snap` 라는 파일이 다음과 같이 만들어집니다
+
+<br />
+
+```
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Profile /> matches snapshot 1`] = `
+<div>
+  <div>
+    <b>
+      hyelin
+    </b>
+
+    <span>
+      (
+      박혜린
+      )
+    </span>
+  </div>
+</div>
+`;
+```
+
+- 컴포넌트가 렌더링됐을 때 이 스냅샷과 일치하지 않으면 테스트가 실패합니다
+- 만약에 스냅샷을 업데이트 하고싶다면 테스트가 실행되고 있는 콘솔 창에서 `u` 키를 누르면 됩니다
+
+<br />
+
+### 3. 쿼리
+
+- `render 함수` 를 실행하고 나면 그 결과물 안에는 다양한 쿼리 함수들이 있는데 이 쿼리 함수들은 react-testing-library 의 기반인 dom-testing-library 에서 지원하는 함수들입니다
+- 이 쿼리 함수들은 `Variant` 와 `Queries` 의 조합으로 네이밍이 이루어져있다
+
+<br />
+
+### 3-1. Variant
+
+- **getBy** :
+  getBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 하나를 선택합니다. 만약에 없으면 에러가 발생합니다.
+
+- **getAllBy** :
+  getAllBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 여러개를 선택합니다. 만약에 하나도 없으면 에러가 발생합니다.
+
+- **queryBy** :
+  queryBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 하나를 선택합니다. 만약에 존재하지 않아도 에러가 발생하지 않습니다.
+
+- **queryAllBy** :
+  queryAllBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 여러개를 선택합니다. 만약에 존재하지 않아도 에러가 발생하지 않습니다.
+
+- **findBy** :
+  findBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 하나가 나타날 때 까지 기다렸다가 해당 DOM 을 선택하는 Promise 를 반환합니다. 기본 timeout 인 4500ms 이후에도 나타나지 않으면 에러가 발생합니다.
+
+- **findAllBy** :
+  findBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 여러개가 나타날 때 까지 기다렸다가 해당 DOM 을 선택하는 Promise 를 반환합니다. 기본 timeout 인 4500ms 이후에도 나타나지 않으면 에러가 발생합니다.
+
+<br />
+
+### 3-2. Queries
+
+- **ByLabelText** : label 이 있는 input 의 label 내용으로 input 을 선택합니다
+
+```
+<label for="username-input">아이디</label>
+<input id="username-input" />
+
+const inputNode = getByLabelText('아이디');
+```
+
+- **ByPlaceholderText** : placeholder 값으로 input 및 textarea 를 선택합니다
+
+```
+<input placeholder="아이디" />;
+
+const inputNode = getByPlaceholderText('아이디');
+```
+
+- **ByText** : 엘리먼트가 가지고 있는 텍스트 값으로 DOM 을 선택합니다
+- `const div = getByText(/^Hello/);` 처럼 텍스트 값에 정규식을 넣어도 된다
+
+```
+<div>Hello World!</div>;
+
+const div = getByText('Hello World!')
+```
+
+- **ByAltText** : `alt 속성`을 가지고 있는 엘리먼트 (주로 `img`) 를 선택합니다
+
+```
+<img src="/awesome.png" alt="awesome image" />;
+
+const imgAwesome = getByAltText('awesomse image');
+```
+
+- **ByTitle** : `title 속성`을 가지고 있는 DOM 혹은 `title 엘리먼트를 지니고있는 SVG` 를 선택 할 때 사용합니다
+
+```
+<p>
+  <span title="React">리액트</span>는 짱 멋진 라이브러리다.
+</p>
+
+<svg>
+  <title>Delete</title>
+  <g><path/></g>
+</svg>
+
+const spanReact = getByTitle('React');
+const svgDelete = getByTitle('Delete');
+```
+
+- **ByDisplayValue** : `input, textarea, select` 가 지니고 있는 현재 값을 가지고 엘리먼트를 선택합니다
