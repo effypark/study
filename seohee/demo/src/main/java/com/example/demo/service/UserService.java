@@ -11,7 +11,7 @@ public interface UserService {
 
     public List<UserDto> getActiveUserList();
 
-    public int insertUser(UserDto userDto) {
-        return UserDto.insertUser(userDto);
-    }
+//    public int insertUser(UserDto userDto) {
+//        return UserDto.insertUser(userDto);
+//    }
 }

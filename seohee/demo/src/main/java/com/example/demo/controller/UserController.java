@@ -26,8 +26,8 @@ public class UserController {
         return userService.getActiveUserList();
     }
 
-    @PostMapping("/join")
-    public int insertUser(UserDto userDto) {
-        return userService.insertUser(userDto);
-    }
+//    @PostMapping("/join")
+//    public int insertUser(UserDto userDto) {
+//        return userService.insertUser(userDto);
+//    }
 }
