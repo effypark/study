@@ -192,3 +192,140 @@ const svgDelete = getByTitle('Delete');
 ```
 
 - **ByDisplayValue** : `input, textarea, select` 가 지니고 있는 현재 값을 가지고 엘리먼트를 선택합니다
+
+- **ByRole** : 특정 role 값을 지니고 있는 엘리먼트를 선택합니다
+
+```
+<span role="button">삭제</span>;
+
+const spanRemove = getByRole('button');
+```
+
+- **ByTestId** : 다른 방법으로 못 선택할때 사용하는 방법인데, 특정 DOM 에 직접 test 할 때 사용할 id 를 달아서 선택하는 것을 의미합니다
+
+```
+<div data-testid="commondiv">흔한 div</div>;
+
+const commonDiv = getByTestId('commondiv');
+```
+
+🆘 값을 설정할때 data-testid="..." 이렇게 설정해야 합니다. 추가적으로, `ByTestId` 는 다른 방법으로 선택할 수 없을때에만 사용해야 합니다.
+
+<br />
+
+### 3-3. 어떤 쿼리를 사용해야 할까?
+
+1. getByLabelText
+2. getByPlaceholderText
+3. getByText
+4. getByDisplayValue
+5. getByAltText
+6. getByTitle
+7. getByRole
+8. getByTestId
+
+<br />
+
+- 매뉴얼 에서는 다음 우선순위를 따라서 사용하는것을 권장하고 있습니다
+
+<br />
+
+- 그리고, DOM 의 querySelector 를 사용 할 수도 있는데, 이는 지양해야합니다. 차라리 data-testid 를 설정하는것이 좋습니다
+
+<br />
+
+### 4. Counter 컴포넌트 테스트 코드 예시
+
+```
+import React, { useState, useCallback } from 'react';
+
+const Counter = () => {
+  const [number, setNumber] = useState(0);
+
+  const onIncrease = useCallback(() => {
+    setNumber(number + 1);
+  }, [number]);
+
+  const onDecrease = useCallback(() => {
+    setNumber(number - 1);
+  }, [number]);
+
+  return (
+    <div>
+      <h2>{number}</h2>
+      <button onClick={onIncrease}>+1</button>
+      <button onClick={onDecrease}>-1</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+- Counter 컴포넌트 예시
+- 상위 파일에서 import 하여 화면에 잘 출력되는 지 확인 후, `src/Counter.test.js` Counter 컴포넌트의 테스트 코드를 작성할 파일을 만듭니다
+
+```
+import React from 'react';
+import { render, fireEvent } from 'react-testing-library';
+import Counter from './Counter';
+
+describe('<Counter />', () => {
+  it('matches snapshot', () => {
+    const utils = render(<Counter />);
+    expect(utils.container).toMatchSnapshot();
+  });
+
+  it('has a number and two buttons', () => {
+    const utils = render(<Counter />);
+
+    // 버튼과 숫자가 있는지 확인
+    utils.getByText('0');
+    utils.getByText('+1');
+    utils.getByText('-1');
+  });
+
+  it('increases', () => {
+    const utils = render(<Counter />);
+    const number = utils.getByText('0');
+    const plusButton = utils.getByText('+1');
+
+    // 클릭 이벤트를 두번 발생시키기
+    fireEvent.click(plusButton);
+    fireEvent.click(plusButton);
+    expect(number).toHaveTextContent('2'); // jest-dom 의 확장 matcher 사용
+    expect(number.textContent).toBe('2'); // textContent 를 직접 비교
+  });
+
+  it('decreases', () => {
+    const utils = render(<Counter />);
+    const number = utils.getByText('0');
+    const plusButton = utils.getByText('-1');
+
+    // 클릭 이벤트를 두번 발생시키기
+    fireEvent.click(plusButton);
+    fireEvent.click(plusButton);
+    expect(number).toHaveTextContent('-2'); // jest-dom 의 확장 matcher 사용
+  });
+});
+```
+
+<br />
+
+### 4-1. 이벤트 다루기
+
+- 여기서 `fireEvent()` 라는 함수를 불러와서 사용했는데, 이 함수는 이벤트를 발생시켜줍니다. 사용법은 다음과 같습니다
+
+<br />
+
+```
+fireEvent.이벤트이름(DOM, 이벤트객체);
+```
+
+<br />
+
+📌 클릭 이벤트의 경우엔 이벤트객체를 따로 넣어주지 않아도 되지만, 예를 들어서 change 이벤트의 경우엔 다음과 같이 해주어야 합니다
+
+```
+fireEvent.change(myInput, { target: { value: 'hello world' } });
+```
