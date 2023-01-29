@@ -1,0 +1,331 @@
+### 1. react-testing-library
+
+> - 모든 테스트를 DOM 위주로 진행합니다.
+> - 컴포넌트의 props 나 state 를 조회하는 일은 없습니다. 컴포넌트를 리팩토링하게 될 때에는, 주로 내부 구조 및 네이밍은 많이 바뀔 수 있어도 실제 작동 방식은 크게 바뀌지 않습니다. react-testing-library는 이 점을 중요시 여겨서, 컴포넌트의 기능이 똑같이 작동한다면 컴포넌트의 내부 구현 방식이 많이 바뀌어도 테스트가 실패하지 않도록 설계되었습니다.
+> - react-testing-library 에는 정말 필요한 기능들만 지원을 해줘서 매우 가볍고, 개발자들이
+>   일관성 있고 좋은 관습을 따르는 테스트 코드를 작성 할 수 있도록 유도해줍니다.
+
+<br />
+
+### 1-1. 설치
+
+`yarn add react-testing-library jest-dom`
+<br />
+`@types/jest`
+
+- jest-dom 은 jest 확장으로서, DOM 에 관련된 matcher 를 추가해줍니다
+- types/jest 도 추가적으로 설치
+
+### 1-2. Test
+
+`import 'react-testing-library/cleanup-after-each'; `
+<Br />
+`import 'jest-dom/extend-expect';`
+
+<br />
+
+- react-testing-library 에서는 리액트에서는 DOM 시뮬레이션을 위한 [JSDOM](https://github.com/jsdom/jsdom) 이라는 도구를 사용하여 document.body 에 리액트 컴포넌트를 렌더링합니다. clean-up-after-each 를 불러오면, 각 테스트 케이스가 끝날때마다 기존에 가상의 화면에 남아있는 UI 를 정리합니다
+
+- 추가적으로, 그 아래에는 jest-dom/extend-expect 를 불러와서 jest 에서 DOM 관련 matcher 를 사용 할 수 있게 해줍니다
+
+<br />
+
+```
+import React from 'react';
+
+const Profile = ({ username, name }) => {
+  return (
+    <div>
+      <b>{username}</b>&nbsp;
+      <span>({name})</span>
+    </div>
+  );
+};
+
+export default Profile;
+```
+
+- 컴포넌트를 하나 만듭니다
+- `<App />`과 같은 가장 최상위 파일에서 해당 컴포넌트를 import 하고 렌더링이 잘 되는 지 확인을 먼저 해봅니다
+
+<br />
+
+```
+import React from 'react';
+import { render } from 'react-testing-library';
+import Profile from './Profile';
+
+describe('<Profile />', () => {
+  it('matches snapshot', () => {
+    const utils = render(<Profile username="hyelin" name="박혜린" />);
+    expect(utils.container).toMatchSnapshot();
+  });
+
+  it('shows the props correctly', () => {
+    const utils = render(<Profile username="hyelin" name="박혜린" />);
+    utils.getByText('hyelin'); // hyelin 라는 텍스트를 가진 엘리먼트가 있는지 확인
+    utils.getByText('(박혜린)'); // (박혜린) 이라는 텍스트를 가진 엘리먼트가 있는지 확인
+    utils.getByText(/박/); // 정규식 /박/ 을 통과하는 엘리먼트가 있는지 확인
+  });
+});
+```
+
+<br />
+
+- yarn run start 해서 실행
+- react-testing-library 에서 컴포넌트를 렌더링 할 때에는 **render()** 라는 함수를 사용합니다
+- 이 함수가 호출되면 그 결과물 에는 DOM 을 선택 할 수 있는 다양한 쿼리들과 container 가 포함되어있는데, 여기서 **container** 는 해당 컴포넌트의 최상위 DOM 을 가르킵니다. 이를 가지고 스냅샷 테스팅을 할 수도 있습니다
+
+<br />
+
+### 2. 스냅샷 테스팅
+
+- 스냅샷 테스팅이란, 렌더링된 결과가 이전에 렌더링한 결과와 일치하는지 확인하는 작업을 의미합니다
+- 코드를 저장하면 `src/__snapshots__/Profile.test.js.snap` 라는 파일이 다음과 같이 만들어집니다
+
+<br />
+
+```
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Profile /> matches snapshot 1`] = `
+<div>
+  <div>
+    <b>
+      hyelin
+    </b>
+
+    <span>
+      (
+      박혜린
+      )
+    </span>
+  </div>
+</div>
+`;
+```
+
+- 컴포넌트가 렌더링됐을 때 이 스냅샷과 일치하지 않으면 테스트가 실패합니다
+- 만약에 스냅샷을 업데이트 하고싶다면 테스트가 실행되고 있는 콘솔 창에서 `u` 키를 누르면 됩니다
+
+<br />
+
+### 3. 쿼리
+
+- `render 함수` 를 실행하고 나면 그 결과물 안에는 다양한 쿼리 함수들이 있는데 이 쿼리 함수들은 react-testing-library 의 기반인 dom-testing-library 에서 지원하는 함수들입니다
+- 이 쿼리 함수들은 `Variant` 와 `Queries` 의 조합으로 네이밍이 이루어져있다
+
+<br />
+
+### 3-1. Variant
+
+- **getBy** :
+  getBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 하나를 선택합니다. 만약에 없으면 에러가 발생합니다.
+
+- **getAllBy** :
+  getAllBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 여러개를 선택합니다. 만약에 하나도 없으면 에러가 발생합니다.
+
+- **queryBy** :
+  queryBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 하나를 선택합니다. 만약에 존재하지 않아도 에러가 발생하지 않습니다.
+
+- **queryAllBy** :
+  queryAllBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 여러개를 선택합니다. 만약에 존재하지 않아도 에러가 발생하지 않습니다.
+
+- **findBy** :
+  findBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 하나가 나타날 때 까지 기다렸다가 해당 DOM 을 선택하는 Promise 를 반환합니다. 기본 timeout 인 4500ms 이후에도 나타나지 않으면 에러가 발생합니다.
+
+- **findAllBy** :
+  findBy\* 로 시작하는 쿼리는 조건에 일치하는 DOM 엘리먼트 여러개가 나타날 때 까지 기다렸다가 해당 DOM 을 선택하는 Promise 를 반환합니다. 기본 timeout 인 4500ms 이후에도 나타나지 않으면 에러가 발생합니다.
+
+<br />
+
+### 3-2. Queries
+
+- **ByLabelText** : label 이 있는 input 의 label 내용으로 input 을 선택합니다
+
+```
+<label for="username-input">아이디</label>
+<input id="username-input" />
+
+const inputNode = getByLabelText('아이디');
+```
+
+- **ByPlaceholderText** : placeholder 값으로 input 및 textarea 를 선택합니다
+
+```
+<input placeholder="아이디" />;
+
+const inputNode = getByPlaceholderText('아이디');
+```
+
+- **ByText** : 엘리먼트가 가지고 있는 텍스트 값으로 DOM 을 선택합니다
+- `const div = getByText(/^Hello/);` 처럼 텍스트 값에 정규식을 넣어도 된다
+
+```
+<div>Hello World!</div>;
+
+const div = getByText('Hello World!')
+```
+
+- **ByAltText** : `alt 속성`을 가지고 있는 엘리먼트 (주로 `img`) 를 선택합니다
+
+```
+<img src="/awesome.png" alt="awesome image" />;
+
+const imgAwesome = getByAltText('awesomse image');
+```
+
+- **ByTitle** : `title 속성`을 가지고 있는 DOM 혹은 `title 엘리먼트를 지니고있는 SVG` 를 선택 할 때 사용합니다
+
+```
+<p>
+  <span title="React">리액트</span>는 짱 멋진 라이브러리다.
+</p>
+
+<svg>
+  <title>Delete</title>
+  <g><path/></g>
+</svg>
+
+const spanReact = getByTitle('React');
+const svgDelete = getByTitle('Delete');
+```
+
+- **ByDisplayValue** : `input, textarea, select` 가 지니고 있는 현재 값을 가지고 엘리먼트를 선택합니다
+
+- **ByRole** : 특정 role 값을 지니고 있는 엘리먼트를 선택합니다
+
+```
+<span role="button">삭제</span>;
+
+const spanRemove = getByRole('button');
+```
+
+- **ByTestId** : 다른 방법으로 못 선택할때 사용하는 방법인데, 특정 DOM 에 직접 test 할 때 사용할 id 를 달아서 선택하는 것을 의미합니다
+
+```
+<div data-testid="commondiv">흔한 div</div>;
+
+const commonDiv = getByTestId('commondiv');
+```
+
+🆘 값을 설정할때 data-testid="..." 이렇게 설정해야 합니다. 추가적으로, `ByTestId` 는 다른 방법으로 선택할 수 없을때에만 사용해야 합니다.
+
+<br />
+
+### 3-3. 어떤 쿼리를 사용해야 할까?
+
+1. getByLabelText
+2. getByPlaceholderText
+3. getByText
+4. getByDisplayValue
+5. getByAltText
+6. getByTitle
+7. getByRole
+8. getByTestId
+
+<br />
+
+- 매뉴얼 에서는 다음 우선순위를 따라서 사용하는것을 권장하고 있습니다
+
+<br />
+
+- 그리고, DOM 의 querySelector 를 사용 할 수도 있는데, 이는 지양해야합니다. 차라리 data-testid 를 설정하는것이 좋습니다
+
+<br />
+
+### 4. Counter 컴포넌트 테스트 코드 예시
+
+```
+import React, { useState, useCallback } from 'react';
+
+const Counter = () => {
+  const [number, setNumber] = useState(0);
+
+  const onIncrease = useCallback(() => {
+    setNumber(number + 1);
+  }, [number]);
+
+  const onDecrease = useCallback(() => {
+    setNumber(number - 1);
+  }, [number]);
+
+  return (
+    <div>
+      <h2>{number}</h2>
+      <button onClick={onIncrease}>+1</button>
+      <button onClick={onDecrease}>-1</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+- Counter 컴포넌트 예시
+- 상위 파일에서 import 하여 화면에 잘 출력되는 지 확인 후, `src/Counter.test.js` Counter 컴포넌트의 테스트 코드를 작성할 파일을 만듭니다
+
+```
+import React from 'react';
+import { render, fireEvent } from 'react-testing-library';
+import Counter from './Counter';
+
+describe('<Counter />', () => {
+  it('matches snapshot', () => {
+    const utils = render(<Counter />);
+    expect(utils.container).toMatchSnapshot();
+  });
+
+  it('has a number and two buttons', () => {
+    const utils = render(<Counter />);
+
+    // 버튼과 숫자가 있는지 확인
+    utils.getByText('0');
+    utils.getByText('+1');
+    utils.getByText('-1');
+  });
+
+  it('increases', () => {
+    const utils = render(<Counter />);
+    const number = utils.getByText('0');
+    const plusButton = utils.getByText('+1');
+
+    // 클릭 이벤트를 두번 발생시키기
+    fireEvent.click(plusButton);
+    fireEvent.click(plusButton);
+    expect(number).toHaveTextContent('2'); // jest-dom 의 확장 matcher 사용
+    expect(number.textContent).toBe('2'); // textContent 를 직접 비교
+  });
+
+  it('decreases', () => {
+    const utils = render(<Counter />);
+    const number = utils.getByText('0');
+    const plusButton = utils.getByText('-1');
+
+    // 클릭 이벤트를 두번 발생시키기
+    fireEvent.click(plusButton);
+    fireEvent.click(plusButton);
+    expect(number).toHaveTextContent('-2'); // jest-dom 의 확장 matcher 사용
+  });
+});
+```
+
+<br />
+
+### 4-1. 이벤트 다루기
+
+- 여기서 `fireEvent()` 라는 함수를 불러와서 사용했는데, 이 함수는 이벤트를 발생시켜줍니다. 사용법은 다음과 같습니다
+
+<br />
+
+```
+fireEvent.이벤트이름(DOM, 이벤트객체);
+```
+
+<br />
+
+📌 클릭 이벤트의 경우엔 이벤트객체를 따로 넣어주지 않아도 되지만, 예를 들어서 change 이벤트의 경우엔 다음과 같이 해주어야 합니다
+
+```
+fireEvent.change(myInput, { target: { value: 'hello world' } });
+```
