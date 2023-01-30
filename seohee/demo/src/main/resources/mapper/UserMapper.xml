@@ -17,8 +17,8 @@
     </select>
 
     <!-- #{} 여기에 들어가는 파람은 모델에서 넘어오는 파라미터 부분과 매핑해주어서 작성 -->
-    <insert id="insertUser" parameterType="com.example.demo.dto.UserDto">
-        INSERT INTO USER(username, password)
-        VALUES (#{username}, #{password})
-    </insert>
+<!--    <insert id="insertUser" parameterType="com.example.demo.dto.UserDto">-->
+<!--        INSERT INTO USER(username, password)-->
+<!--        VALUES (#{username}, #{password})-->
+<!--    </insert>-->
 </mapper>
