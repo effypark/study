@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.getActiveUserList();
     }
 
-    public int insertUser(UserDto userDto) {
-        return userMapper.insertUser(userDto);
-    }
+//    public int insertUser(UserDto userDto) {
+//        return userMapper.insertUser(userDto);
+//    }
 }
