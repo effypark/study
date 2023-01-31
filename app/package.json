@@ -45,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/ckeditor__ckeditor5-build-classic": "^29.0.1"
   }
 }
