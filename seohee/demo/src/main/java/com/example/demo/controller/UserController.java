@@ -2,9 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController // view 페이지가 필요없는 API 응답에 어울리는 어노테이션입니다.
 public class UserController {
@@ -18,6 +16,11 @@ public class UserController {
     @PutMapping("/join")
     public void insertUser(@RequestParam("username") String username, @RequestParam("password") String password) {
         userMapper.insertUser(username, password);
+    }
+
+    @DeleteMapping("/delete/{idx}")
+    public void deleteUser(@PathVariable String idx) {
+        userMapper.deleteUser(idx);
     }
 //    @RequestMapping(value = "/user", method = RequestMethod.GET)
 //    public List<UserDto> getUser() {
