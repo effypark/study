@@ -19,8 +19,8 @@ public class UserController {
     }
 
     @PostMapping("/update/{idx}")
-    public void updateUser(@RequestParam("username") String username, @RequestParam("password") String password) {
-        userMapper.updateUser(username, password);
+    public void updateUser(@PathVariable String idx, @RequestParam("username") String username) {
+        userMapper.updateUser(idx, username);
     }
 
     @DeleteMapping("/delete/{idx}")

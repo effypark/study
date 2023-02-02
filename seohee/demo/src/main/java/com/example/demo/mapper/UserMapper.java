@@ -14,9 +14,9 @@ public interface UserMapper {
     @Insert("INSERT INTO users(username, password) VALUES (#{username}, #{password})")
     int insertUser(@Param("username") String username, @Param("password") String password);
 
-    @Update("UPDATE users SET username=${username} WHERE idx=${idx}")
-    int updateUser(@Param("username") String username, @Param("idx") String idx);
+    @Update("UPDATE users SET username=#{username} WHERE idx = #{idx}")
+    int updateUser(@Param("idx") String idx, @Param("username") String username);
 
-    @Delete("DELETE FROM users where idx = ${idx}")
+    @Delete("DELETE FROM users where idx = #{idx}")
     int deleteUser(@Param("idx") String idx);
 }
