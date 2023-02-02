@@ -70,3 +70,101 @@ describe("useToggle", () => {
 - useToggle hook 에서 return 값이 [state, toggle] 이기 때문에 이 값이 result 에 담겨져 있다
 
 📌 테스트 코드 내부에서 컴포넌트 렌더링 및 상태 변경은 `act` 함수 내부에서 실행해야 한다
+
+<br />
+
+- useFetch.tsx
+
+<br />
+
+```
+// 테스트용도의 최소한의 useFetch hook 구현체
+
+export const useFetch = <T = any>({
+  url = '',
+  autoFetch = true,
+  method = 'get',
+}) => {
+  const [data, setData] = useState<T | null>(null);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+  const fetchData = useCallback(() => {
+    if (url) {
+      httpRequest(url)
+        [method]()
+        .then((res) => {
+          setData({ ...res, isLoaded: true });
+        })
+        .finally(() => {
+          setIsLoaded(true);
+        });
+    }
+  }, [url, method]);
+
+  useEffect(() => {
+    if (autoFetch && !data) {
+      fetchData();
+    }
+  }, [autoFetch, data, fetchData]);
+
+  return { data, isLoaded, fetchData };
+};
+```
+
+<br />
+
+우선 훅 내부에서 호출하는 api를 포함하는 디렉토리를 import 한다
+
+<br />
+
+`import * as api from '~/apis';`
+
+<br />
+
+```
+import * as api from '~/apis';
+
+// httpRequest 객체를 mocking 해줌
+
+jest.mock('~/apis', () => ({
+  httpRequest: jest.fn(() => ({ get: () => Promise.resolve() })),
+}));
+
+
+describe('useFetch', () => {
+  // url이 없으면 호출하지 않음
+
+  it('useFetch empty string api => not fetch', async () => {
+    const { result } = renderHook(() => useFetch({ url: '' }));
+    expect(result.current?.data).toEqual(null);
+    const spy = jest.spyOn(api, 'httpRequest');
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
+
+  it('useFetch', async () => {
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useFetch({ url: 'some' }),
+    );
+
+    //처음엔 data의 초기값인 null 이어야 한다
+    expect(result.current?.data).toEqual(null);
+    await waitForNextUpdate();
+    // effect를 기다렸다가,
+
+    // 데이터 로드가 끝남을 확인
+     expect(result.current?.data).toEqual({ isLoaded: true });
+
+    // 데이터 로드가 끝났으므로, httpRequest는 1번 호출 되어야 함
+    const spy = jest.spyOn(api, 'httpRequest');
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    // 의도적으로 다시 fetch 함수 호출
+    result.current?.fetchData();
+    await waitForNextUpdate();
+
+    // httpRequest가 한번 더 호출됐는지 확인
+    expect(spy).toHaveBeenCalledTimes(2);
+  });
+});
+
+```
