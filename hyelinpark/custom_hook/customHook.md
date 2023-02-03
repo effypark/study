@@ -23,3 +23,4 @@ _참고 링크 : <https://usehooks.com/>_
 - [x] useTransition : unmount 되는 컴포넌트에 애니메이션을 추가하기 위한 hook (클릭 이벤트로 mount/unmount 시 transition 이 일어나는 컴포넌트를 개발 중에 useScrollFadeIn 으로 스크롤에 의존해서 효과를 주는 것을 변경해서 재사용해보려 했으나, unmount 시 transition 을 주기 어려워 적용해봄)
 - [x] useFullScreen
 - [x] useStep : 한 모달 내에서 multi step 으로 구현하고자 사용해보았는데, 사용할 때 훨씬 가독성이 좋은 것 같아 기록
+- [x] useLockBodyScroll : 모달 라이브러리를 쓰지 않고 직접 구현할 때 사용. 모달이 마운트 될 때 모달 뒤로 보이는 전체 body 의 스크롤을 방지하고 모달이 사라질 때 다시 스크롤을 가능하게 할 때 사용.
