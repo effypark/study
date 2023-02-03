@@ -18,13 +18,18 @@ public class UserController {
         userMapper.insertUser(username, password);
     }
 
+    @PostMapping("/update/{idx}")
+    public void updateUser(@PathVariable String idx, @RequestParam("username") String username) {
+        userMapper.updateUser(idx, username);
+    }
+
     @DeleteMapping("/delete/{idx}")
     public void deleteUser(@PathVariable String idx) {
         userMapper.deleteUser(idx);
     }
 
     // 풀리퀘 머지 안하고 커밋해서 합쳐졌다!
-    
+
 //    @RequestMapping(value = "/user", method = RequestMethod.GET)
 //    public List<UserDto> getUser() {
 //        return userService.getUserList();

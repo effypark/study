@@ -1,10 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.UserDto;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -17,6 +14,9 @@ public interface UserMapper {
     @Insert("INSERT INTO users(username, password) VALUES (#{username}, #{password})")
     int insertUser(@Param("username") String username, @Param("password") String password);
 
-    @Delete("DELETE FROM users where idx = ${idx}")
+    @Update("UPDATE users SET username=#{username} WHERE idx = #{idx}")
+    int updateUser(@Param("idx") String idx, @Param("username") String username);
+
+    @Delete("DELETE FROM users where idx = #{idx}")
     int deleteUser(@Param("idx") String idx);
 }
