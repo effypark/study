@@ -1,4 +1,4 @@
-# network remind
+# useState
 
 ## 1.useState 동기 처리에 대한 정리
 seState는 비동기적으로 작동합니다. 그렇지만 input태그를 다루려다보면 필연적으로 동기적으로 동작해야하는 상황이 오기 마련입니다.
