@@ -24,3 +24,4 @@ _참고 링크 : <https://usehooks.com/>_
 - [x] useFullScreen
 - [x] useStep : 한 모달 내에서 multi step 으로 구현하고자 사용해보았는데, 사용할 때 훨씬 가독성이 좋은 것 같아 기록
 - [x] useLockBodyScroll : 모달 라이브러리를 쓰지 않고 직접 구현할 때 사용. 모달이 마운트 될 때 모달 뒤로 보이는 전체 body 의 스크롤을 방지하고 모달이 사라질 때 다시 스크롤을 가능하게 할 때 사용.
+- [x] useKeyPress : 사용자가 키보드에서 특정 키를 누를 때 쉽게 감지해서 원하는 이벤트를 구현하기 위한 hook.
