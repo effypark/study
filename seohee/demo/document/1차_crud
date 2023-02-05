@@ -1,0 +1,17 @@
+- Mapper 설정 파일(xml)에 있는 SQL 쿼리문을 호출하기 위한 인터페이스를 생성
+- DAO 대신 @Mapper 어노테이션을 사용
+- @Mapper 어노테이션을 사용하면 빈으로 등록
+- Service 단에서 Autowired 하여 사용
+- 메소드 명은 Mapper xml 파일의 id 매칭함
+
+사실상 MyBatis와 JPA는 비교 대상이 되지 않을 수 있다.
+왜냐하면 JPA는 ORM 기술로 분류되고,
+MyBatis는 SQL Builder 또는 SQL Mapper의 한 종류이기 때문이다.
+
+MyBatis는 원래 Apache Foundation의 iBatis였으나, 생산성, 개발 프로세스, 커뮤니티 등의 이유로
+Google Code로 이전되면서 이름이 변경되었다.
+MyBatis는 record에 원시 타입과 Map 인터페이스, 그리고 자바 POJO를 설정해서 매핑하기 위해 xml과 Annotation을 사용할 수 있다.
+
+JPA를 사용하다 보면 Hibernate를 많이 사용하게 되는데 Hibernate는 JPA의 구현체라고 할 수 있다.
+Hibernate 이외에도 DataNucleus, EclipseLink 등 다양한 JPA 구현체가 존재한다.
+그래도 우리가 Hibernate를 사용하는 것은 가장 범용적으로 다양한 기능을 제공하기 때문이다.
