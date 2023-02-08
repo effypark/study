@@ -275,4 +275,147 @@ const arr = combine<string | number>([1, 2, 3], ["hello"]);
 
 - 수동으로 타입을 지정해주어야 합니다.
 
+<br />
+
+### 좋은 제네릭 함수를 작성하기 위한 가이드라인
+> 너무 많은 타입 매개변수나 제한 조건을 꼭 필요하지 않은 곳에 사용하는 것은 추론을 잘하지 못하게 해서 함수 호출자를 불만스럽게 만들 수 있습니다.
+
+<br />
+
+- 타입 매개변수를 누르기
+
+<Br />
+
+```
+function firstElement1<Type>(arr: Type[]) {
+  return arr[0];
+}
+
+function firstElement2<Type extends any[]>(arr: Type) {
+  return arr[0];
+}
+
+// a: number (good)
+const a = firstElement1([1, 2, 3]);
+
+// b: any (bad)
+const b = firstElement2([1, 2, 3]);
+```
+
+- firstElement1이 이 함수를 작성하는데 더 좋은 방법입니다. 이 함수의 추론된 반환 타입은 Type 인데, firstElement2의 추론된 반환 타입은 TypeScript가 호출 중에 타입을 해석하기 위해서 “기다리기” 보다 호출 시점에 arr[0] 표현식을 타입 제한 조건을 이용해서 해석하기 때문에 any가 됩니다
+
+<br />
+
+- 더 적은 타입 매개변수를 사용하기
+
+```
+function filter1<Type>(arr: Type[], func: (arg: Type) => boolean): Type[] {
+  return arr.filter(func);
+}
+
+function filter2<Type, Func extends (arg: Type) => boolean>(
+  arr: Type[],
+  func: Func
+): Type[] {
+  return arr.filter(func);
+}
+```
+
+- 이 두 함수의 차이는 두 값을 연관시키지 않는 타입 매개변수 Func 입니다.
+- 이는 타입 인수를 원하는 호출자가 아무 이유 없이 추가 타입 인수를 제공해야 하기 때문에 좋지 않습니다. Func는 함수를 더 읽고 이해하기 어렵게 만들 뿐이지, 아무것도 하지 않습니다
+
+📌 타입 매개변수는 가능한 최소로 사용하는 것이 좋다.
+
+<br />
+
+- 타입 매개변수는 두 번 나타나야 합니다.
+
+<br />
+
+```
+function greet<Str extends string>(s: Str) {
+  console.log("Hello, " + s);
+}
+
+greet("world");
+
+// 수정한 코드
+
+function greet(s: string) {
+  console.log("Hello, " + s);
+}
+```
+
+- 타입 매개변수는 여러 값의 타입을 연관시키는 용도로 사용한다.
+- 만약 타입 매개변수가 함수 시그니처에서 한 번만 사용되었다면, 어떤 것도 연관시키지 않고 있는 것.
+
+<br />
+
+### 선택적 매개변수
+> TypeScript에서는 매개변수를 ```?```로 표시함으로 선택적으로 만들 수 있습니다.
+
+```
+function f(x?: number) {
+  // ...
+}
+f(); // OK
+f(10); // OK
+```
+
+- 매개변수의 타입이 number로 지정되었지만, JavaScript에서 명시되지 않은 매개변수는 undefined가 되기 때문에, x 매개변수는 실질적으로 number | undefined 타입이 됩니다.
+- 매개변수가 선택적일 때, 호출자는 undefined를 넘김으로써, “누락된” 인수를 흉내 낼 수 있습니다.
+
+📌 콜백에 대한 함수 타입을 작성할 때, 해당 인수 없이 호출할 의도가 없는 한 절대로 선택적 매개변수를 사용하면 안된다.
+
+<br />
+
+### 좋은 오버로드 작성하기
+> 제네릭처럼, 함수 오버로드를 작성할 때 따라야 할 몇몇 가이드라인이 있습니다. 다음의 규칙을 따르는 것은 함수들을 부르기 쉽고, 이해하기 쉽고, 구현하기 쉽게 만들어 줍니다.
+
+<br />
+
+```
+function len(s: string): number;
+function len(arr: any[]): number;
+function len(x: any) {
+  return x.length;
+}
+```
+- 문자열 혹은 배열의 길이를 반환하는 함수
+- 이 함수를 문자열이나 배열을 통해서 호출할 수 있습니다. 하지만...
+
+```
+// output
+
+len(""); // OK
+len([0]); // OK
+len(Math.random() > 0.5 ? "hello" : [0]);
+
+No overload matches this call.
+  Overload 1 of 2, '(s: string): number', gave the following error.
+    Argument of type 'number[] | "hello"' is not assignable to parameter of type 'string'.
+      Type 'number[]' is not assignable to type 'string'.
+  Overload 2 of 2, '(arr: any[]): number', gave the following error.
+    Argument of type 'number[] | "hello"' is not assignable to parameter of type 'any[]'.
+      Type 'string' is not assignable to type 'any[]'.
+
+```
+
+- 짠. 이렇게 노 오버로드 매치가 뜹니다.
+- TypeScript는 하나의 오버로드를 통해서만 함수를 해석하기에, 우리는 이 함수를 문자열 또는 배열이 될 수 있는 값을 통해서 호출할 수 없습니다.
+
+<br />
+
+```
+// 수정된 코드
+
+function len(x: any[] | string) {
+  return x.length;
+}
+```
+
+- 호출자는 이 함수를 두 가지 값 중 하나를 이용하여 호출할 수 있으며, 추가적으로 정확한 구현 시그니처를 찾을 필요도 없어졌습니다.
+
+📌 가능하면 오버로드 대신 유니언 타입을 사용하자
+
 ````
