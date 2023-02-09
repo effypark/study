@@ -71,12 +71,14 @@ const SearchInput = () => {
       console.log(regex.test(query.toLowerCase()));
       let foundItems:Item[] = [];
       let langugeType = regex.test(query.toLowerCase()) ? "En":"Ko";
-
-      foundItems = products.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
-        //대소문자 통일 검색을 위해 '.toLowerCase()' 소문자로 변환해줍니다.
-      );
-
+      
+      foundItems = products.filter((item) => {
+        if (langugeType === 'En') {
+          return item.name.toLowerCase().includes(query.toLowerCase())
+        } else {
+          return item.nama_ko.toLowerCase().includes(query.toLowerCase())
+        }
+      });
       setResult(foundItems);
     };
   

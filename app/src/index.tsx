@@ -15,6 +15,7 @@ import NoneUseTransition from "./pages/loadBalance/NoneUseTransition";
 import UseDeferredValue from "./pages/loadBalance/UseDeferredValue";
 import AddScriptTag from "./pages/AddScript/AddScriptTag";
 import Wysiwyg from "./pages/Wysiwyg";
+import SearchInput from "./pages/SearchInput";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,11 @@ const router = createBrowserRouter([
   {
     path: "WysiwygEditor",
     element: <Wysiwyg />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "SearchInput",
+    element: <SearchInput />,
     errorElement: <ErrorPage />,
   },
 ]);
