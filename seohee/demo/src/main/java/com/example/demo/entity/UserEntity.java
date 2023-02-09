@@ -1,8 +1,13 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.UserDto;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 @Table(name = "users")
 
 // 일종의 테이블 역할
@@ -20,6 +25,11 @@ public class UserEntity {
     @Column
     private String password;
 
-    @Column
-    private String active;
+    public static UserEntity toUserEntity(UserDto userDto) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setName(userDto.getName());
+        userEntity.setEmail(userDto.getEmail());
+        userEntity.setPassword(userDto.getPassword());
+        return userEntity;
+    }
 }

@@ -25,6 +25,6 @@ public class AuthController {
 
         userService.save(userDto);
 
-        return "index";
+        return "login";
     }
 }
