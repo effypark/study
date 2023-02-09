@@ -1,11 +1,14 @@
 package com.example.demo.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class UserDto {
     private int idx;
-    private String username;
+    private String name;
+    private String email;
     private String password;
-    private String active;
 }
