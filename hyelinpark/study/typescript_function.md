@@ -418,4 +418,167 @@ function len(x: any[] | string) {
 
 📌 가능하면 오버로드 대신 유니언 타입을 사용하자
 
+<br />
+
+### 알아야 할 타입
+> 함수 타입에 대해서 작업을 할 때, 자주 나타나는 몇 가지 추가 타입들이 더 있습니다. 모든 타입처럼, 이 타입들을 어디서나 사용하실 수 있지만, 이 타입들은 특별히 함수라는 맥락에 관련이 깊습니다.
+
+<br />
+
+> **void**
+- void는 값을 반환하지 않는 함수의 반환 값을 의미합니다.
+- 함수에 return문이 없거나, 명시적으로 값을 반환하지 않을 때, 추론되는 타입입니다.
+
+<br />
+
+```
+// 추론된 반환 타입은 void 입니다.
+
+function noop() {
+  return;
+}
+```
+
+- JavaScript에서는, 아무것도 반환하지 않는 함수는 암묵적으로 undefined 값을 반환합니다. 하지만 TypeScript에서 void와 undefined는 같은 것으로 간주되지 않습니다.
+
+<br />
+
+> object
+-  특별한 타입 object는 원시 값(string, number, bigint, boolean, symbol, null, undefined)이 아닌 모든 값을 지칭합니다. 이것은 빈 객체 타입 { }와는 다르고, 전역 타입 Object와도 다릅니다.
+
+📌 object는 Object가 아니다.. 항상 object 를 사용해야 한다!@
+
+- JavaScript에서 함수 값은 객체입니다. 프로퍼티가 있고, 프로토타입 체인에 Object.prototype가 있고, instanceof Object이면서, Object.keys를 호출할 수 있고, 기타 등등이 있습니다. 이러한 이유로, TypeScript에서 함수 타입은 object로 간주됩니다.
+
+<br />
+
+> unknown
+- unknown 타입은 모든 값을 나타냅니다.
+- any 타입과 유사하지만, unknown 타입에 어떤 것을 대입하는 것이 유효하지 않기 때문에 더 안전합니다.
+
+<br />
+
+```
+function f1(a: any) {
+  a.b(); // OK
+}
+
+function f2(a: unknown) {
+  a.b();
+Object is of type 'unknown'.
+}
+```
+
+- 이는 any 형태의 값을 함수 본문에 사용하지 않고도, 아무 값이나 받는 함수를 표현할 수 있기 때문에, 함수 타입을 설명하는 데에 유용하게 쓰입니다.
+
+반대로, unknown 타입의 값을 반환하는 함수를 표현할 수 있습니다.
+
+```
+function safeParse(s: string): unknown {
+  return JSON.parse(s);
+}
+
+// 'obj'를 사용할 때 조심해야 합니다!
+const obj = safeParse(someRandomString);
+```
+
+<Br />
+
+> never
+- 어떤 함수는 결코(never) 값을 반환하지 않습니다
+
+```
+function fail(msg: string): never {
+  throw new Error(msg);
+}
+```
+
+- never는 일반적으로 함수의 리턴 타입으로 사용됩니다.
+- 함수의 리턴 타입으로 never가 사용될 경우, 항상 오류를 출력하거나 리턴 값을 절대로 내보내지 않음을 의미합니다. 이는 무한 루프(loop)에 빠지는 것과 같습니다.
+
+> **그래서 never 는 무엇인가?**
+> - never가 무엇이고 왜 만들어졌는지 이해하기 위해서는, 먼저 타입시스템에서 타입이 무엇을 의미하는지 이해해야 합니다.
+> - 타입은 가능한 값의 집합을 의미합니다. 예를 들어서, string이라는 타입은 가능한 모든 문자열의 집합을 의미합니다. 그러므로 변수에 string이라는 타입을 달아둔다는 것은, 이 변수에는 문자열만 할당할 수 있다는 것을 의미합니다.
+> - TypeScript에서 never 는 없는 값의 집합입니다. TypeScript 이전에 인기가 있었던 flow에서는, 이와 동일한 역할을 하는 empty라고 하는 것이 존재합니다.
+> - 이 집합에는 값이 없기 때문에, never 은 어떠한 값도 가질 수 없으며, 여기에는 any 타입에 해당하는 값들도 포함됩니다. 이러한 특징 때문에, never 는 uninhabitable type bottom type 이라고도 불립니다.
+
+<br />
+
+
+> **never는 왜 필요한가?**
+> - 숫자에서 아무것도 존재하지 않는 것을 표현하기 위해 0이 존재하는 것처럼, 타입 시스템에서도 그 어떤 것도 불가능하다는 것을 나타내는 타입이 필요합니다.
+
+<br />
+
+📌 여기서 불가능하다는 것이란,
+
+
+
+
+1. 어떤 값도 가질 수 없는 빈 타입
+- 제네릭 및 함수에서 허용되지 않는 파라미터
+- 호환 되지 않는 타입 교차
+- 빈 유니언 타입 (유니언 했지만 아무것도 안되는 경우)
+
+
+2.실행이 완료되면 caller에게 제어 권한을 반환하지 않는 (혹은 의도된) 함수의 반환 유형 (예: node의 ```process.exit()```)
+ - void와는 다르다. void는 함수가 caller에게 아무것도 리턴하지 않는 다는 것을 의미한다.
+
+3. rejected된 promise의 fulfill 값
+```
+const p = Promise.reject('foo') // const p: Promise<never>
+```
+
+
+<br />
+
+> **Never 타입은 어떻게 사용할 수 있을까?**
+
+<br />
+
+1. 허용할 수 없는 함수 파라미터에 제한을 하는 방법
+- never 타입에는 값을 할당 할 수 없기 때문에, 함수에 올수 있는 다양한 파라미터에 제한을 거는 용도로 사용할 수 있습니다.
+
+```
+함수는 never만 사용 가능하다.
+function fn(input: never) {
+  // do something...
+}
+
+declare let myNever: never
+fn(myNever) // ✅
+
+// never 이외에 다른 값은 타입 에러를 야기한다.
+fn() // ❌
+fn(1) // ❌
+fn('foo') // ❌
+declare let myAny: any
+fn(myAny)
+```
+
+<Br />
+
+2. switch if-else 문에서 일치 하지 않는 값이 오는 경우
+- 함수가 never 타입만 인수로 받는 경우, 함수는 never외의 다른 값과 함께 실행 될 수 없습니다.
+- 이러한 특징을 사용하여, switch 문과 if-else 문장 내부에서 철저한 일치를 보장할 수 있습니다.
+
+```
+function unknownColor(x: never): never {
+  throw new Error('unknown color')
+}
+
+type Color = 'red' | 'green' | 'blue'
+
+function getColorName(c: Color): string {
+  switch (c) {
+    case 'red':
+      return 'is red'
+    case 'green':
+      return 'is green'
+    default:
+      return unknownColor(c) // 그 외의 string으 불가능하다.
+  }
+}
+```
+
 ````
