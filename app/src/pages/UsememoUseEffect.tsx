@@ -20,13 +20,13 @@ const UsememoUseEffect: React.FunctionComponent<UsememoUseEffectProps> = props =
     },[name])// 종속값이 변경되기 전까지는 말이죠.
     
     const type_filter_set = [
-      {id: "1", name: "빡공단"},
-      {id: "2", name: "슈퍼z"},
-      {id: "3", name: "연장"},
-      {id: "4", name: "와디즈"},
-      {id: "5", name: "일반"},
-      {id: "6", name: "일반(실제금액0원)"},
-      {id: "7", name: "제휴&제공"},
+      {id: "1", name: "A"},
+      {id: "2", name: "B"},
+      {id: "3", name: "C"},
+      {id: "4", name: "D"},
+      {id: "5", name: "E"},
+      {id: "6", name: "F"},
+      {id: "7", name: "G"},
     ];
     const [typeFilter,setTypeFilter] = useState('');
     const changeHandler = (checked:any, name:string, value:string) => {
