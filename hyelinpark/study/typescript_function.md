@@ -688,4 +688,71 @@ function sum({ a, b, c }: ABC) {
 ```
 type ABC = Record<string, number>;
 ```
+
+<br />
+
+### 함수의 할당가능성
+
+<br />
+
+> ```void``` 반환 타입
+
+- 함수의 void 반환 타입은 몇몇 일반적이지는 않지만 예측할 수 있는 동작을 발생시킬 수 있습니다.
+
+- void 반환 타입으로의 문맥적 타이핑은 함수를 아무것도 반환하지 않도록 강제하지 않습니다.이를 설명하는 또 다른 방법은, void 반환 타입을 가지는 문맥적 함수 타입(type vf = () => void)가 구현되었을 때, 아무값이나 반환될 수 있지만, 무시됩니다.
+
+- 그러므로 후술할 타입 () => void의 구현들은 모두 유효합니다.
+
+<br />
+
+```
+type voidFunc = () => void;
+
+const f1: voidFunc = () => {
+  return true;
+};
+
+const f2: voidFunc = () => true;
+
+const f3: voidFunc = function () {
+  return true;
+};
+```
+
+- 그리고 이러한 함수의 반환값이 다른 변수에 할당될 때, 이들은 여전히 void타입을 유지할 것입니다.
+
+```
+const v1 = f1();
+
+const v2 = f2();
+
+const v3 = f3();
+```
+
+<br />
+
+
+- 이러한 동작이 존재하기에, Array.prototype.push가 number를 반환하고,
+- Array.prototype.forEach 메서드가 void 반환 타입을 가지는 함수를 예상함에도 다음 코드는 유효할 수 있습니다.
+
+```
+const src = [1, 2, 3];
+const dst = [0];
+
+src.forEach((el) => dst.push(el));
+```
+
+- 유의해야 할 한 가지 다른 경우가 있습니다. 리터럴 함수 정의가 void 반환 값을 가지고 있다면, 그 함수는 어떠한 것도 반환해서는 안됩니다.
+
+```
+function f2(): void {
+  // @ts-expect-error
+  return true;
+}
+
+const f3 = function (): void {
+  // @ts-expect-error
+  return true;
+};
+```
 ````
