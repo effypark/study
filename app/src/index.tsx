@@ -16,6 +16,7 @@ import UseDeferredValue from "./pages/loadBalance/UseDeferredValue";
 import AddScriptTag from "./pages/AddScript/AddScriptTag";
 import Wysiwyg from "./pages/Wysiwyg";
 import SearchInput from "./pages/SearchInput";
+import TypeofTest from "./pages/TypeofTest";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
   {
     path: "SearchInput",
     element: <SearchInput />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "TypeofTest",
+    element: <TypeofTest />,
     errorElement: <ErrorPage />,
   },
 ]);
