@@ -58,3 +58,140 @@ const palette = {
 const redComponent = palette.red.at(0);
 const greenNormalized = palette.green.toUpperCase();
 ```
+
+<br />
+
+- satisfies는 많은 오류를 탐지하는데 사용할 수 있습니다. 예를 들면, 객체가 특정 타입의 모든 키를 가지지만, 그 이상은 가지지 않도록 할 수 있습니다.
+
+```
+type Colors = "red" | "green" | "blue";
+// 'Colors' 키가 정확한지 확인합니다.
+
+const favoriteColors = {
+    "red": "yes",
+    "green": false,
+    "blue": "kinda",
+    "platypus": false
+//  ~~~~~~~~~~ 에러 - "platypus"는 'Colors' 리스트에 없습니다.
+} satisfies Record<Colors, unknown>;
+
+// 'red', 'green' 및 'blue' 프로퍼티의 모든 정보가 유지됩니다.
+const g: boolean = favoriteColors.green;
+```
+
+- 프로퍼티 이름 일치 여부보다 각 프로퍼티의 타입에 관심이 있을 수 있습니다. 이 경우 개체의 모든 프로퍼티 값이 일부 타입을 준수하는지 확인할 수도 있습니다.
+
+```
+type RGB = [red: number, green: number, blue: number];
+const palette = {
+    red: [255, 0, 0],
+    green: "#00ff00",
+    blue: [0, 0]
+    //    ~~~~~~ 에러!
+} satisfies Record<string, string | RGB>;
+
+// 각 프로퍼티에 대한 정보는 계속 유지됩니다.
+const redComponent = palette.red.at(0);
+const greenNormalized = palette.green.toUpperCase();
+```
+
+<br />
+
+### “in” 연산자를 사용하여 정의되지 않은 프로퍼티로 타입 좁히기
+
+- 개발자들은 자주 런타임에서 알 수 없는 값을 처리해야 할 때가 있습니다. 서버에서 응답받거나 설정 파일을 읽는 경우처럼 실제로 프로퍼티가 존재하는지 알 수 없는 경우가 흔하게 있습니다. JavaScript의 in 연산자를 사용하면 객체에 프로퍼티가 존재하는지 알 수 있습니다.
+- 이전 TypeScript 버전에서는 명시적으로 프로퍼티가 타입 목록에 없다면 범위를 좁힐 수 있었습니다.
+
+```
+interface RGB {
+red: number;
+green: number;
+blue: number;
+}
+
+interface HSV {
+hue: number;
+saturation: number;
+value: number;
+}
+
+function setColor(color: RGB | HSV) {
+if ("hue" in color) {
+// 이제 'color'의 타입은 HSV 입니다.
+}
+// ...
+}
+```
+
+- 여기서, RGB 타입에 정의되지 않은 hue에 의해 타입이 좁혀지게 되어, HSV 타입이 되었습니다.
+- 그러나 프로퍼티가 주어진 타입이 없는 경우에는 어떨까?
+
+```
+function tryGetPackageName(context) {
+const packageJSON = context.packageJSON;
+
+// 객체 여부를 확인합니다.
+if (packageJSON && typeof packageJSON === "object") {
+
+// 문자열 타입의 name 프로퍼티를 가지고 있는지 확인합니다.
+if ("name" in packageJSON && typeof packageJSON.name === "string") {
+return packageJSON.name;
+}
+}
+return undefined;
+}
+```
+
+- 이것을 표준 TypeScript로 다시 작성한다면 context 타입을 정의해서 사용할 수 있습니다. 하지만 packageJSON의 프로퍼티에 unknown과 같은 안전한 타입을 사용하면 이전 TypeScript 버전에서 문제가 발생할 수 있습니다.
+
+<br />
+
+```
+interface Context {
+packageJSON: unknown;
+}
+
+function tryGetPackageName(context: Context) {
+const packageJSON = context.packageJSON;
+// 객체 여부를 확인합니다.
+if (packageJSON && typeof packageJSON === "object") {
+// 문자열 타입의 name 프로퍼티를 가지고 있는지 확인합니다.
+if ("name" in packageJSON && typeof packageJSON.name === "string") {
+// ~~~~
+// error! Property 'name' does not exist on type 'object.
+return packageJSON.name;
+// ~~~~
+// error! Property 'name' does not exist on type 'object.
+}
+}
+return undefined;
+}
+```
+
+- packageJSON의 타입이 unknown에서 object로 좁혀졌지만, in 연산자는 실제 정의한 타입으로 엄격하게 좁혔기 때문입니다. 결과적으로 packageJSON의 타입은 object가 되었습니다.
+
+📌TypeScript 4.9는 프로퍼티가 전혀 정의되지 않은 타입으로 좁힐 때, `in 연산자`를 사용하여 조금 더 강력하게 만듭니다. 이전과 차이는 없지만, 언어 내부적으로 Record<"property-key-being-checked", unknown> 타입을 교차합니다.
+
+- 따라서 위 예시에서, `packageJSON` 타입은 unknown에서 object로, 그다음 object & Record<"name", unknown>로 타입이 좁혀집니다. 이를 통해 packageJSON.name에 직접 접근이 가능해지고 독립적으로 좁혀집니다.
+
+```
+interface Context {
+packageJSON: unknown;
+}
+
+function tryGetPackageName(context: Context): string | undefined {
+const packageJSON = context.packageJSON;
+
+// 객체 여부를 확인합니다.
+if (packageJSON && typeof packageJSON === "object") {
+
+// 문자열 타입의 name 프로퍼티를 가지고 있는지 확인합니다.
+if ("name" in packageJSON && typeof packageJSON.name === "string") {
+
+// 정상 동작합니다!
+return packageJSON.name;
+}
+}
+return undefined;
+}
+```
