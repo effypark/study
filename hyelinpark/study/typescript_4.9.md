@@ -142,7 +142,8 @@ return undefined;
 }
 ```
 
-- 이것을 표준 TypeScript로 다시 작성한다면 context 타입을 정의해서 사용할 수 있습니다. 하지만 packageJSON의 프로퍼티에 unknown과 같은 안전한 타입을 사용하면 이전 TypeScript 버전에서 문제가 발생할 수 있습니다.
+- 이것을 표준 TypeScript로 다시 작성한다면 context 타입을 정의해서 사용할 수 있습니다.
+- 하지만 packageJSON의 프로퍼티에 unknown과 같은 안전한 타입을 사용하면 이전 TypeScript 버전에서 문제가 발생할 수 있습니다.
 
 <br />
 
@@ -195,3 +196,82 @@ return packageJSON.name;
 return undefined;
 }
 ```
+
+<br />
+
+### 클래스의 자동 접근자
+
+- TypeScript 4.9는 자동 접근자라고 하는 ECMAScript의 향후 기능을 지원합니다.
+- 자동 접근자는 `accessor` 키워드로 선언된다는 점을 제외하면 클래스의 속성처럼 선언됩니다.
+
+<br />
+
+```
+class Person {
+    accessor name: string;
+    constructor(name: string) {
+        this.name = name;
+    }
+}
+```
+
+- 내부적으로 이러한 자동 접근자는 도달할 수 없는 private 프로퍼티의 get 및 set 접근자로 “de-sugar”됩니다.
+
+```
+class Person {
+    #__name: string;
+
+    get name() {
+        return this.#__name;
+    }
+
+    set name(value: string) {
+        this.#__name = name;
+    }
+
+    constructor(name: string) {
+        this.name = name;
+    }
+}
+```
+
+<br />
+
+### NaN 동등성 검사
+
+- JavaScript 로 개발을 할 때 주요 문제는 내장된 동등 연산자를 사용해서 NaN 값을 확인하는 점입니다.
+- NaN은 특수 숫자 값으로 “Not a Number”를 의미합니다. NaN과 동일한 것은 없습니다. 심지어 NaN도 마찬가지입니다.
+
+```
+console.log(NaN == 0)  // false
+console.log(NaN === 0) // false
+console.log(NaN == NaN)  // false
+console.log(NaN === NaN) // false
+```
+
+- 하지만 적어도 대칭적으로 모든 것 은 항상 NaN과 동일하지 않습니다.
+
+```
+console.log(NaN != 0)  // true
+console.log(NaN !== 0) // true
+console.log(NaN != NaN)  // true
+console.log(NaN !== NaN) // true
+```
+
+- IEEE-754 float를 포함하는 모든 언어가 동일하게 동작하므로, 기술적으로 JavaScript만의 문제는 아닙니다.
+- JavaScript의 기본 숫자 타입은 부동소수점 숫자이며, JavaScript는 숫자 구문을 종종 NaN으로 분석할 수 있습니다. 그러므로 NaN 값 확인은 일반적이며, Number.isNaN를 사용하면 올바르게 확인할 수 있습니다. 하지만 위에서 언급했듯이 많은 사람들이 실수로 someValue === NaN을 사용해서 확인하게 됩니다.
+
+<br />
+
+- TypeScript는 이제 NaN 값을 직접 비교하면 오류를 보여주고 Number.isNaN 사용을 제안합니다.
+
+```
+function validate(someValue: number) {
+    return someValue !== NaN;
+    //     ~~~~~~~~~~~~~~~~~
+    // error: This condition will always return 'true'.
+    //        Did you mean '!Number.isNaN(someValue)'?
+}
+```
+
+- 이번 변경(Number.isNaN)은 TypeScript가 현재 객체 및 배열 리터럴에 대한 비교에서 오류를 발생시키는 방식과 유사하게, 초보자 오류를 잡는 데 큰 도움이 될 수 있습니다.
