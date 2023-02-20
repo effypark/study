@@ -581,4 +581,178 @@ function getColorName(c: Color): string {
 }
 ```
 
+<br />
+
+> Function
+- 전역 타입 Function은 bind, call, apply 그리고 JavaScript 함수 값에 있는 다른 프로퍼티를 설명하는 데에 사용됩니다.
+- 또한 여기에는 Function 타입의 값은 언제나 호출될 수 있다는 값을 가지며, 이러한 호출은 any를 반환합니다.
+
+<br />
+
+```
+function doSomething(f: Function) {
+  return f(1, 2, 3);
+}
+```
+
+이는 타입되지 않은 함수 호출 이며, 안전하지 않은 any 타입을 반환하기에 일반적으로 피하는 것이 가장 좋습니다.
+
+만약 임의의 함수를 허용해야 하지만, 호출할 생각이 없다면 () => void 타입이 일반적으로 더 안전합니다.
+
+<br />
+
+
+### 나머지 매개변수와 인수
+
+> 나머지 매개변수 (Rest Parameter)
+
+- 선택적 매개변수와 오버로드를 사용하여 다양한 정해진 인수들을 받아 들일 수 있지만, 정해지지 않은 수의 인수를 받아 들이는 함수를 나머지 매개변수를 이용하여 정의할 수 있습니다.
+- 나머지 매개변수는 다른 모든 매개변수 뒤에 나타나며, ... 구문을 사용합니다.
+
+<br />
+
+```
+function multiply(n: number, ...m: number[]) {
+  return m.map((x) => n * x);
+}
+
+// 'a' gets value [10, 20, 30, 40]
+const a = multiply(10, 1, 2, 3, 4);
+```
+
+TypeScript에서는, 이러한 매개변수에 대한 타입 표기는 암묵적으로 any가 아닌 any[]를 사용하며, 타입 표현식은 Array<T> 또는 T[] 또는 튜플 타입으로 표현해야 합니다.
+
+<br />
+
+> 나머지 인수(Rest Argument)
+- 반대로 전개 구문을 사용하여 배열에서 제공되는 인수의 개수를 제공할 수 있습니다. 예를 들어, 배열의 push 메서드는 인수를 몇 개든 받을 수 있습니다.
+
+<br />
+
+```
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+
+arr1.push(...arr2);
+```
+
+일반적으로 TypeScript는 배열이 불변하다고 간주하지 않습니다. 이로 인해 다음과 같은 놀라운 동작이 발생할 수 있습니다.
+
+```
+// 추론된 타입은 0개 이상의 숫자를 가지는 배열인 number[]
+// 명시적으로 2개의 숫자를 가지는 배열로 간주되지 않습니다
+
+const args = [8, 5];
+const angle = Math.atan2(...args);
+
+A spread argument must either have a tuple type or be passed to a rest parameter.
+```
+
+이러한 상황의 최선의 해결책은 코드에 따라서 다르지만, 일반적으로 const 콘텍스트가 가장 간단한 해결책입니다.
+
+```
+// 길이가 2인 튜플로 추론됨
+const args = [8, 5] as const;
+// OK
+const angle = Math.atan2(...args);
+```
+
+나머지 인수를 사용하는 것은 오래된 런타임을 대상으로 할 때, downlevelIteration을 필요로 할 수 있습니다.
+
+<br />
+
+📌 **튜플 타입** ```as Type```
+
+<br />
+
+### 매개변수 구조 분해(Parameter Destructing)
+
+```
+function sum({ a, b, c }: { a: number; b: number; c: number }) {
+  console.log(a + b + c);
+}
+```
+
+구조 분해 할당한 매개변수는 이렇게 따로 이름 붙은 타입을 사용할 수 있습니다.
+
+```
+// 이전 예제와 동일
+type ABC = { a: number; b: number; c: number };
+function sum({ a, b, c }: ABC) {
+  console.log(a + b + c);
+}
+```
+
+혹은 이 부분을 ```Record``` 문법으로 변경해서 사용할 수 있습니다.
+
+```
+type ABC = Record<string, number>;
+```
+
+<br />
+
+### 함수의 할당가능성
+
+<br />
+
+> ```void``` 반환 타입
+
+- 함수의 void 반환 타입은 몇몇 일반적이지는 않지만 예측할 수 있는 동작을 발생시킬 수 있습니다.
+
+- void 반환 타입으로의 문맥적 타이핑은 함수를 아무것도 반환하지 않도록 강제하지 않습니다.이를 설명하는 또 다른 방법은, void 반환 타입을 가지는 문맥적 함수 타입(type vf = () => void)가 구현되었을 때, 아무값이나 반환될 수 있지만, 무시됩니다.
+
+- 그러므로 후술할 타입 () => void의 구현들은 모두 유효합니다.
+
+<br />
+
+```
+type voidFunc = () => void;
+
+const f1: voidFunc = () => {
+  return true;
+};
+
+const f2: voidFunc = () => true;
+
+const f3: voidFunc = function () {
+  return true;
+};
+```
+
+- 그리고 이러한 함수의 반환값이 다른 변수에 할당될 때, 이들은 여전히 void타입을 유지할 것입니다.
+
+```
+const v1 = f1();
+
+const v2 = f2();
+
+const v3 = f3();
+```
+
+<br />
+
+
+- 이러한 동작이 존재하기에, Array.prototype.push가 number를 반환하고,
+- Array.prototype.forEach 메서드가 void 반환 타입을 가지는 함수를 예상함에도 다음 코드는 유효할 수 있습니다.
+
+```
+const src = [1, 2, 3];
+const dst = [0];
+
+src.forEach((el) => dst.push(el));
+```
+
+- 유의해야 할 한 가지 다른 경우가 있습니다. 리터럴 함수 정의가 void 반환 값을 가지고 있다면, 그 함수는 어떠한 것도 반환해서는 안됩니다.
+
+```
+function f2(): void {
+  // @ts-expect-error
+  return true;
+}
+
+const f3 = function (): void {
+  // @ts-expect-error
+  return true;
+};
+```
 ````
