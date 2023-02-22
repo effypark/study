@@ -1,8 +1,8 @@
 import React from 'react';
-import WysiwygEditor from "../Components/WysiwygEditor"
-export interface TestGrahpProps {};
+import '../assets/css/testgraph.css'
+export interface TestGraphProps {};
 
-const testGrahp: React.FunctionComponent<TestGrahpProps> = props => {
+const TestGraph: React.FunctionComponent<TestGraphProps> = props => {
     return (
       <>
         <div className="x-box"></div>
@@ -16,4 +16,4 @@ const testGrahp: React.FunctionComponent<TestGrahpProps> = props => {
     )
 }
 
-export default testGrahp;
+export default TestGraph;
