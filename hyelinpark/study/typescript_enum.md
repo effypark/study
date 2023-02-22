@@ -144,3 +144,69 @@ enum FileAccess {
   G = "123".length,
 }
 ```
+
+<br />
+
+### 유니언 열거형과 열거형 멤버 타입 (Union enums and enum member types)
+
+- 계산되지 않는 상수 열거 멤버의 특수한 부분 집합이 있습니다
+- 리터럴 열거형 멤버 리터럴 열거형 멤버는 초기화 값이 존재하지 않거나, 아래 값들로 초기화되는 멤버입니다.
+
+<br />
+
+- 문자 리터럴 (예시. "foo", "bar, "baz")
+- 숫자 리터럴 (예시. 1, 100)
+- 숫자 리터럴에 단항 연산자 - 가 적용된 경우 (e.g. -1, -100)
+  열거형의 모든 멤버가 리터럴 열거형 값을 가지면 특별한 의미로 쓰이게 됩니다.
+
+<br />
+
+첫째로 열거형 멤버를 타입처럼 사용할 수 있습니다.
+예를 들어 특정 멤버는 오직 열거형 멤버의 값만 가지게 할 수 있습니다.
+
+<br />
+
+```
+enum ShapeKind {
+  Circle,
+  Square,
+}
+
+interface Circle {
+  kind: ShapeKind.Circle;
+  radius: number;
+}
+
+interface Square {
+  kind: ShapeKind.Square;
+  sideLength: number;
+}
+
+let c: Circle = {
+  kind: ShapeKind.Square, // 오류! 'ShapeKind.Circle' 타입에 'ShapeKind.Square' 타입을 할당할 수 없습니다.
+
+Type 'ShapeKind.Square' is not assignable to type 'ShapeKind.Circle'.
+  radius: 100,
+};
+```
+
+- 또 다른 점은 열거형 타입 자체가 효율적으로 각각의 열거형 멤버의 유니언이 된다는 점입니다. 유니언 타입 열거형을 사용하면 타입 시스템이 열거형 자체에 존재하는 정확한 값의 집합을 알고 있다는 사실을 활용할 수 있다는 점만 알아두면 됩니다. 이 때문에 TypeScript는 값을 잘못 비교하는 버그를 잡을 수 있습니다.
+
+ex>
+
+```
+enum E {
+  Foo,
+  Bar,
+}
+
+function f(x: E) {
+  if (x !== E.Foo || x !== E.Bar) {
+This condition will always return 'true' since the types 'E.Foo' and 'E.Bar' have no overlap.
+    //             ~~~~~~~~~~~
+    // 에러! E 타입은 Foo, Bar 둘 중 하나이기 때문에 이 조건은 항상 true를 반환합니다.
+  }
+}
+```
+
+- 이 예제에서 x 가 E.Foo 가 아닌지 확인합니다. 만약 이 조건이 true 라면, || 조건은 더는 체크할 필요가 없으므로 if 아래의 body가 실행될 것입니다. 그러나 만약 이 조건이 통과되지 않는다면, x 는 반드시 E.Foo 이기 때문에, x가 E.Bar 가 아닌지 묻는 조건과 비교하는 것은 적절하지 않습니다.
