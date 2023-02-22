@@ -1,0 +1,12 @@
+프론트엔드 스캐폴딩을 해주는 패키지인 laravel/ui 설치
+composer require laravel/ui
+php artisan ui react
+npm install && npm run dev
+
+https://velog.io/@munbeom/Laravel-React.JS%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%B9%84%EB%8F%99%EA%B8%B0-%EB%B0%A9%EC%8B%9D%EC%9D%98-%EA%B4%80%EB%A6%AC%EC%9E%90-%ED%8E%98%EC%9D%B4%EC%A7%80-%EB%A7%8C%EB%93%A4%EA%B8%B0%EC%82%B0%EB%A7%8C%ED%95%A8-%EC%A3%BC%EC%9D%98
+참고할것
+
+
+JWT(Json Web Token)
+https://dev-yakuza.posstree.com/ko/clog/development-journal/
+https://dev-yakuza.posstree.com/ko/laravel/jwt/ (참고)
