@@ -21,9 +21,11 @@ function solution(absolutes, signs) {
 // 다른 사람의, 비슷하지만 더 짧은 풀이
 function solution(absolutes, signs) {
     let answer = 0;
+
     for (let i = 0; i < absolutes.length; i++) {
         signs[i] ? (answer += absolutes[i]) : (answer -= absolutes[i]);
     }
+
     return answer;
 }
 
