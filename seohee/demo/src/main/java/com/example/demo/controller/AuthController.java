@@ -26,15 +26,16 @@ public class AuthController {
         userService.save(userDto);
 
         return "login";
+    }
 
-//        <dependency>
-//        <groupId>org.springframework.boot</groupId>
-//        <artifactId>spring-boot-starter-security</artifactId>
-//        </dependency>
+    @PostMapping("/auth/login")
+    public String login(@ModelAttribute UserDto userDto) {
+        UserDto loginResult = userService.login(userDto);
 
-//        스프링 시큐리티는 프로젝트 짤 때 로그인한 유저에 대해 쉽게 관리할 수 있게 해줍니다.
-//        세팅만 할 수 있다면 유저의 id와 pw에 따른 로그인 진행(인증과정), 권한(ROLE) 부여와 권한에 따른 접근 제어, 유저 정보 보관, 세션 관리 등을
-//        간단하게 처리할 수 있습니다.
-
+        if (loginResult != null) {
+            return "main"; // 성공
+        } else {
+            return "login"; // 실패
+        }
     }
 }
