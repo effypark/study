@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UserDto;
 import com.example.demo.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +29,17 @@ public class AuthController {
         return "login";
     }
 
+    @GetMapping("/auth/login")
+    public String loginForm() {
+        return "login";
+    }
+
     @PostMapping("/auth/login")
-    public String login(@ModelAttribute UserDto userDto) {
+    public String login(@ModelAttribute UserDto userDto, HttpSession session) {
         UserDto loginResult = userService.login(userDto);
 
         if (loginResult != null) {
+            session.setAttribute("loginEmail", loginResult.getEmail());
             return "main"; // 성공
         } else {
             return "login"; // 실패

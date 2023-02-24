@@ -27,6 +27,7 @@ public class UserService {
         Optional<UserEntity> byUserEmail = userRepository.findByEmail(userDto.getEmail());
 
         // 조회 정보가 있으면
+        // orElseThrow
         if (byUserEmail.isPresent()) {
             UserEntity userEntity = byUserEmail.get();
 

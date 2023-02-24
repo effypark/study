@@ -14,7 +14,7 @@ import lombok.Setter;
 public class UserEntity {
     @Id // pk 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private Long id;
+    private Long idx;
 
     @Column(unique = true) // unique 걸기
     private String name;
