@@ -23,6 +23,7 @@ function solution1(n) {
             answer = (x + 1) * (x + 1);
         } else answer = -1;
     }
+
     return answer;
 }
 
