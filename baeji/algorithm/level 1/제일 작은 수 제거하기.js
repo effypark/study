@@ -4,7 +4,7 @@
 
 // 나의 첫 번째 풀이
 function solution(arr) {
-    let min = Math.min(arr);
+    let min = Math.min(...arr);
 
     arr.splice(arr.indexOf(min), 1);
 
@@ -12,6 +12,7 @@ function solution(arr) {
     return arr;
 }
 
+// 나의 두 번째 풀이
 function solution(arr) {
     let min = Math.min(...arr);
 
