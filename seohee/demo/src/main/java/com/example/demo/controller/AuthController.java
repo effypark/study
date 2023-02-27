@@ -45,4 +45,11 @@ public class AuthController {
             return "login"; // 실패
         }
     }
+
+    @GetMapping("/user/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // 무효화
+
+        return "index";
+    }
 }
