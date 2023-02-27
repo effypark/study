@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx" /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */,
     "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
@@ -9,7 +12,6 @@
       "@hooks/*": ["hooks/*"],
       "@types/*": ["types/*"]
     },
-      //...
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
