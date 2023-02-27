@@ -17,6 +17,7 @@ import AddScriptTag from "./pages/AddScript/AddScriptTag";
 import Wysiwyg from "./pages/Wysiwyg";
 import SearchInput from "./pages/SearchInput";
 import TypeofTest from "./pages/TypeofTest";
+import TestGrahp from "./pages/TestGraph";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,12 @@ const router = createBrowserRouter([
     element: <TypeofTest />,
     errorElement: <ErrorPage />,
   },
+  {
+    path: "TestGrahp",
+    element: <TestGrahp />,
+    errorElement: <ErrorPage />,
+  },
+  
 ]);
 
 const root = ReactDOM.createRoot(
