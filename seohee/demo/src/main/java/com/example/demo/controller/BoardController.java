@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/board")
 public class BoardController {
-    @GetMapping("/save")
-    public String saveForm() {
-        return "save";
-    }
-
     @GetMapping("/")
     public String list() {
         return "list";
+    }
+
+    @GetMapping("/save")
+    public String saveForm() {
+        return "save";
     }
 }
