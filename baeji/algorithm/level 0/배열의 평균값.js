@@ -28,3 +28,4 @@ function solution(numbers) {
     
     return answer / numbers.length;
 }
+
