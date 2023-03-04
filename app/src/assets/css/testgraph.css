@@ -11,9 +11,11 @@ body{
 	background:#171f1a;
 	color: #fff;
 
+/*
 	display: flex;
 	align-items: center;
 	justify-content: center;
+*/
 	min-height: 100vh;
 }
 
