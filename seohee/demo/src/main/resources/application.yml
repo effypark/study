@@ -14,3 +14,6 @@ mybatis:
   mapper-locations: classpath:mapper/**.xml
   configuration:
     map-underscore-to-camel-case: true
+
+
+#건든게없는데디비연결이안된다..
