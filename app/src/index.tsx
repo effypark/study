@@ -18,6 +18,8 @@ import Wysiwyg from "./pages/Wysiwyg";
 import SearchInput from "./pages/SearchInput";
 import TypeofTest from "./pages/TypeofTest";
 import TestGrahp from "./pages/TestGraph";
+import SmoothMove from "./pages/SmoothMove";
+import TestMenu from "./pages/TestMenu";
 
 const router = createBrowserRouter([
   {
@@ -75,7 +77,16 @@ const router = createBrowserRouter([
     element: <TestGrahp />,
     errorElement: <ErrorPage />,
   },
-  
+  {
+    path: "SmoothMove",
+    element: <SmoothMove />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "TestMenu",
+    element: <TestMenu />,
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(
