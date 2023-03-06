@@ -20,6 +20,7 @@ import TypeofTest from "./pages/TypeofTest";
 import TestGrahp from "./pages/TestGraph";
 import SmoothMove from "./pages/SmoothMove";
 import TestMenu from "./pages/TestMenu";
+import Invite from "./pages/Invite";
 
 const router = createBrowserRouter([
   {
@@ -85,6 +86,11 @@ const router = createBrowserRouter([
   {
     path: "TestMenu",
     element: <TestMenu />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "Invite",
+    element: <Invite />,
     errorElement: <ErrorPage />,
   },
 ]);
