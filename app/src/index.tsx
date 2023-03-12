@@ -21,6 +21,7 @@ import TestGrahp from "./pages/TestGraph";
 import SmoothMove from "./pages/SmoothMove";
 import TestMenu from "./pages/TestMenu";
 import Invite from "./pages/Invite";
+import ModalTest from "./pages/ModalTest";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,11 @@ const router = createBrowserRouter([
   {
     path: "Invite",
     element: <Invite />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "ModalTest",
+    element: <ModalTest />,
     errorElement: <ErrorPage />,
   },
 ]);
