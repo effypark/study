@@ -16,8 +16,7 @@ export default store;
 ```
 
 ## configureStore
-Reducer에서 반환된 새로운 state를 Store라는 객체로 정리해 관리하는곳입니다
-Store는 Redux Toolkit configureStore에 객체 형식으로 reducer를 전달하여 만들 수 있습니다.또한 기존에 createStore비슷하지만 ! 여기서 주의할 점은  {reducer: rootReducer} 로 만들어 주어서 넣어야합니다 ! 
+configureStore 함수는 리덕스 라이브러리의의 createStore 함수를 추상화한 것입니다. 기존의 번거로웠던 리덕스 설정을 간편하게 할 수 있도록 해주고 설정시 디폴트로 redux-thunk와 DevTools를 제공해줍니다.
 
 
 ```
