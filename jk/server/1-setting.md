@@ -21,3 +21,4 @@ ex) mydomain.com -> mydomain.iptime.org -> 집컴퓨터
 ## 작업내역
 
 # 1번 완료
+# 2번 완료😁
